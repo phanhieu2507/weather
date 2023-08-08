@@ -88,6 +88,6 @@ button {
 }
 .App {
   /* ... */
-  background-image: url('D:\Tailieu\Code\weather\weather-app\public\bg.jpg');
+  background-image: url('../public/bg.jpg');
   background-size: cover;
 }
