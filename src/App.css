@@ -62,6 +62,7 @@ button {
   border-radius: 4px;
   color: white;
   cursor: pointer;
+  margin-top: 0.5rem;
 }
 
 .weather-info {
@@ -91,3 +92,36 @@ button {
   background-image: url('../public/bg.jpg');
   background-size: cover;
 }
+/* ... */
+
+.forecast {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.forecast-item {
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.forecast-item:hover {
+  background-color: #f0f0f0;
+}
+
+.forecast-item.selected {
+  background-color: #007bff;
+  color: white;
+}
+
+.weather-detail {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+}
+
+/* ... */
