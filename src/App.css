@@ -129,11 +129,11 @@ button {
   display: flex;
   overflow-x: auto;
   margin-top: 10px;
-  gap: 20px; /* Khoảng cách giữa các phần tử */
-  padding-bottom: 20px; /* Dấu hiệu cuộn ngang */
+  gap: 20px; 
+  padding-bottom: 20px; 
 }
 .hourly-item {
-  flex-shrink: 0; /* Không co lại kích thước */
+  flex-shrink: 0; 
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
