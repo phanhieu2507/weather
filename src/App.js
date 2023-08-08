@@ -14,7 +14,17 @@ function App() {
 
   const fetchWeatherData = async () => {
     try {
-      const response = await axios.get(`https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${city}&days=7`);
+      let response;
+  
+      if (city.match(/^[-+]?[0-9]*\.?[0-9]+,[-+]?[0-9]*\.?[0-9]+$/)) {
+        // Search by coordinates (latitude, longitude)
+        const [latitude, longitude] = city.split(',');
+        response = await axios.get(`https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${latitude},${longitude}&days=7`);
+      } else {
+        // Search by city name
+        response = await axios.get(`https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${city}&days=7`);
+      }
+  
       setWeatherData(response.data);
       setSelectedDayIndex(null);
       setSelectedHourlyIndex(null);
@@ -22,6 +32,7 @@ function App() {
       console.error('Error fetching weather data:', error);
     }
   };
+  
 
   const weatherIcons = {
     maxTemp: <FontAwesomeIcon icon={faTemperatureHigh} />,
