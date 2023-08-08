@@ -8,6 +8,7 @@ function App() {
   const [city, setCity] = useState('');
   const [weatherData, setWeatherData] = useState(null);
   const [selectedDayIndex, setSelectedDayIndex] = useState(null);
+  const [selectedHourlyIndex, setSelectedHourlyIndex] = useState(null);
 
   const API_KEY = '616cff8c8988474eb6992953230808';
 
@@ -16,6 +17,7 @@ function App() {
       const response = await axios.get(`https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${city}&days=7`);
       setWeatherData(response.data);
       setSelectedDayIndex(null);
+      setSelectedHourlyIndex(null);
     } catch (error) {
       console.error('Error fetching weather data:', error);
     }
@@ -47,7 +49,11 @@ function App() {
           
           <div className="forecast">
             {weatherData.forecast.forecastday.map((day, index) => (
-              <div key={index} className={`forecast-item ${selectedDayIndex === index ? 'selected' : ''}`} onClick={() => setSelectedDayIndex(index)}>
+              <div
+                key={index}
+                className={`forecast-item ${selectedDayIndex === index ? 'selected' : ''}`}
+                onClick={() => setSelectedDayIndex(index)}
+              >
                 <p>{weatherIcons.maxTemp} Max Temp: {day.day.maxtemp_c}°C</p>
                 <p>{weatherIcons.minTemp} Min Temp: {day.day.mintemp_c}°C</p>
                 <p>{weatherIcons.wind} Wind Speed: {day.day.maxwind_kph} km/h</p>
@@ -55,7 +61,6 @@ function App() {
                 <p>{weatherIcons.cloud} Cloud Cover: {day.day.daily_will_it_cloud}%</p>
                 <p>{weatherIcons.precipitation} Precipitation: {day.day.totalprecip_mm} mm</p>
                 <img src={day.day.condition.icon} alt="Weather icon" />
-                {/* Thêm các thông tin khác mà bạn muốn hiển thị */}
               </div>
             ))}
           </div>
@@ -69,12 +74,37 @@ function App() {
               <p>{weatherIcons.humidity} Humidity: {weatherData.forecast.forecastday[selectedDayIndex].day.avghumidity}%</p>
               <p>{weatherIcons.cloud} Cloud Cover: {weatherData.forecast.forecastday[selectedDayIndex].day.daily_will_it_cloud}%</p>
               <p>{weatherIcons.precipitation} Precipitation: {weatherData.forecast.forecastday[selectedDayIndex].day.totalprecip_mm} mm</p>
-              {/* Thêm các thông tin khác mà bạn muốn hiển thị */}
+              <img src={weatherData.forecast.forecastday[selectedDayIndex].day.condition.icon} alt="Weather icon" />
             </div>
           )}
-          
+
+{selectedDayIndex !== null && (
+  <div className="hourly-weather">
+    <h3>Hourly Weather for {weatherData.forecast.forecastday[selectedDayIndex].date}</h3>
+    <div className="hourly-items">
+      {weatherData.forecast.forecastday[selectedDayIndex].hour.map((hour, index) => (
+        [0 ,4, 8, 12, 16 ,20].includes(index) && (
+          <div
+            key={index}
+            className={`hourly-item ${selectedHourlyIndex === index ? 'selected' : ''}`}
+            onClick={() => setSelectedHourlyIndex(index)}
+          >
+             <h3>{hour.time.split(' ')[1]}</h3>
+            <img src={hour.condition.icon} alt="Weather icon" />
+            <p>{weatherIcons.maxTemp} Temp: {hour.temp_c}°C</p>
+            <p>{weatherIcons.wind} Wind Speed: {hour.wind_kph} km/h</p>
+            <p>{weatherIcons.humidity} Humidity: {hour.humidity}%</p>
+            <p>{weatherIcons.cloud} Cloud Cover: {hour.cloud}%</p>
+            <p>{weatherIcons.precipitation} Precipitation: {hour.precip_mm} mm</p>
+          </div>
+        )
+      ))}
+    </div>
+  </div>
+)}
+
+
         </div>
-        
       )}
     </div>
   );
