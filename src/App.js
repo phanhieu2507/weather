@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './App.css';
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTemperatureHigh, faTemperatureLow, faWind, faTint, faCloud, faUmbrella } from '@fortawesome/free-solid-svg-icons';
 
 function App() {
   const [city, setCity] = useState('');
@@ -17,6 +19,15 @@ function App() {
     } catch (error) {
       console.error('Error fetching weather data:', error);
     }
+  };
+
+  const weatherIcons = {
+    maxTemp: <FontAwesomeIcon icon={faTemperatureHigh} />,
+    minTemp: <FontAwesomeIcon icon={faTemperatureLow} />,
+    wind: <FontAwesomeIcon icon={faWind} />,
+    humidity: <FontAwesomeIcon icon={faTint} />,
+    cloud: <FontAwesomeIcon icon={faCloud} />,
+    precipitation: <FontAwesomeIcon icon={faUmbrella} />,
   };
 
   return (
@@ -37,11 +48,14 @@ function App() {
           <div className="forecast">
             {weatherData.forecast.forecastday.map((day, index) => (
               <div key={index} className={`forecast-item ${selectedDayIndex === index ? 'selected' : ''}`} onClick={() => setSelectedDayIndex(index)}>
-                <p>Date: {day.date}</p>
-                <p>Condition: {day.day.condition.text}</p>
-                <p>Max Temp: {day.day.maxtemp_c}°C</p>
-                <p>Min Temp: {day.day.mintemp_c}°C</p>
+                <p>{weatherIcons.maxTemp} Max Temp: {day.day.maxtemp_c}°C</p>
+                <p>{weatherIcons.minTemp} Min Temp: {day.day.mintemp_c}°C</p>
+                <p>{weatherIcons.wind} Wind Speed: {day.day.maxwind_kph} km/h</p>
+                <p>{weatherIcons.humidity} Humidity: {day.day.avghumidity}%</p>
+                <p>{weatherIcons.cloud} Cloud Cover: {day.day.daily_will_it_cloud}%</p>
+                <p>{weatherIcons.precipitation} Precipitation: {day.day.totalprecip_mm} mm</p>
                 <img src={day.day.condition.icon} alt="Weather icon" />
+                {/* Thêm các thông tin khác mà bạn muốn hiển thị */}
               </div>
             ))}
           </div>
@@ -49,22 +63,18 @@ function App() {
           {selectedDayIndex !== null && (
             <div className="weather-detail">
               <h3>Weather Detail for {weatherData.forecast.forecastday[selectedDayIndex].date}</h3>
-              {selectedDayIndex !== null && (
-            <div className="weather-detail">
-              <p>Max Temp: {weatherData.forecast.forecastday[selectedDayIndex].day.maxtemp_c}°C</p>
-              <p>Min Temp: {weatherData.forecast.forecastday[selectedDayIndex].day.mintemp_c}°C</p>
-              <p>Average Temp: {weatherData.forecast.forecastday[selectedDayIndex].day.avgtemp_c}°C</p>
-              <p>Condition: {weatherData.forecast.forecastday[selectedDayIndex].day.condition.text}</p>
-              <p>Wind Speed: {weatherData.forecast.forecastday[selectedDayIndex].day.maxwind_kph} km/h</p>
-              <p>Humidity: {weatherData.forecast.forecastday[selectedDayIndex].day.avghumidity}%</p>
-              <p>Cloud Cover: {weatherData.forecast.forecastday[selectedDayIndex].day.daily_will_it_cloud}%</p>
-              <p>Precipitation: {weatherData.forecast.forecastday[selectedDayIndex].day.totalprecip_mm} mm</p>
+              <p>{weatherIcons.maxTemp} Max Temp: {weatherData.forecast.forecastday[selectedDayIndex].day.maxtemp_c}°C</p>
+              <p>{weatherIcons.minTemp} Min Temp: {weatherData.forecast.forecastday[selectedDayIndex].day.mintemp_c}°C</p>
+              <p>{weatherIcons.wind} Wind Speed: {weatherData.forecast.forecastday[selectedDayIndex].day.maxwind_kph} km/h</p>
+              <p>{weatherIcons.humidity} Humidity: {weatherData.forecast.forecastday[selectedDayIndex].day.avghumidity}%</p>
+              <p>{weatherIcons.cloud} Cloud Cover: {weatherData.forecast.forecastday[selectedDayIndex].day.daily_will_it_cloud}%</p>
+              <p>{weatherIcons.precipitation} Precipitation: {weatherData.forecast.forecastday[selectedDayIndex].day.totalprecip_mm} mm</p>
               {/* Thêm các thông tin khác mà bạn muốn hiển thị */}
             </div>
           )}
-            </div>
-          )}
+          
         </div>
+        
       )}
     </div>
   );
