@@ -29,13 +29,21 @@ function App() {
       <button onClick={fetchWeatherData}>Get Weather</button>
 
       {weatherData && (
-        <div className="weather-info">
-          <h2>Weather in {weatherData.location.name}, {weatherData.location.country}</h2>
-          <p>Temperature: {weatherData.current.temp_c}°C</p>
-          <p>Condition: {weatherData.current.condition.text}</p>
-          <img src={weatherData.current.condition.icon} alt="Weather icon" />
-        </div>
-      )}
+  <div className="weather-info">
+    <h2>Weather in {weatherData.location.name}, {weatherData.location.country}</h2>
+    <p>Temperature: {weatherData.current.temp_c}°C</p>
+    <p>Condition: {weatherData.current.condition.text}</p>
+    <img src={weatherData.current.condition.icon} alt="Weather icon" />
+
+    <p>Wind: {weatherData.current.wind_kph} km/h, {weatherData.current.wind_dir}</p>
+    <p>Pressure: {weatherData.current.pressure_mb} mb</p>
+    <p>Precipitation: {weatherData.current.precip_mm} mm</p>
+    <p>Humidity: {weatherData.current.humidity}%</p>
+    <p>Cloud Cover: {weatherData.current.cloud}%</p>
+    <p>Feels Like: {weatherData.current.feelslike_c}°C</p>
+    <p>Visibility: {weatherData.current.vis_km} km</p>
+  </div>
+)}
     </div>
   );
 }

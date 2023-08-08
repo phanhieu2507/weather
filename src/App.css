@@ -36,3 +36,58 @@
     transform: rotate(360deg);
   }
 }
+.App {
+  text-align: center;
+  padding: 2rem;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+h1 {
+  margin-bottom: 1rem;
+}
+
+input {
+  padding: 0.5rem;
+  width: 100%;
+  border: none;
+  border-radius: 4px;
+  margin-right: 1rem;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+}
+
+.weather-info {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+.weather-info h2 {
+  margin-bottom: 0.5rem;
+}
+
+.weather-info p {
+  margin: 0.5rem 0;
+}
+
+.weather-icon {
+  max-width: 50px;
+  display: block;
+  margin: 0 auto;
+}
+.App {
+  /* ... */
+  background-image: url('D:\Tailieu\Code\weather\weather-app\public\bg.jpg');
+  background-size: cover;
+}
