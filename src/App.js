@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -41,7 +41,22 @@ function App() {
       console.error("Error fetching weather data:", error);
     }
   };
-
+  useEffect(() => {
+    // Get current user's geolocation
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const { latitude, longitude } = position.coords;
+        // Call the fetchWeatherData function with latitude and longitude
+        setCity(`${latitude},${longitude}`)
+        console.log(city)
+        fetchWeatherData();
+      }, (error) => {
+        console.error('Error getting geolocation:', error);
+      });
+    } else {
+      console.error('Geolocation is not supported by this browser.');
+    }
+  }, []);
   const weatherIcons = {
     maxTemp: <FontAwesomeIcon icon={faTemperatureHigh} />,
     minTemp: <FontAwesomeIcon icon={faTemperatureLow} />,
