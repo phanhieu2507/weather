@@ -18,12 +18,20 @@ function App() {
   const [selectedHourlyIndex, setSelectedHourlyIndex] = useState(null);
 
   const API_KEY = "616cff8c8988474eb6992953230808";
-
-  const fetchWeatherData = async (location) => {
+  const fetchWeatherData = async (city) => {
     try {
-      const response = await axios.get(
-        `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${location}&days=7`
-      );
+      let response;
+      if (city.match(/^[-+]?[0-9]*\.?[0-9]+,[-+]?[0-9]*\.?[0-9]+$/)) {
+        const [latitude, longitude] = city.split(",");
+        response = await axios.get(
+          `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${latitude},${longitude}&days=7`
+        );
+      } else {
+        response = await axios.get(
+          `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${city}&days=7`
+        );
+      }
+
       setWeatherData(response.data);
       setSelectedDayIndex(null);
       setSelectedHourlyIndex(null);
@@ -32,23 +40,24 @@ function App() {
     }
   };
 
-  useEffect(() => {
-    // Get current user's geolocation
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          const location = `${latitude},${longitude}`;
-          setCity(location);
-          fetchWeatherData(location);
-        },
-        (error) => {
-          console.error("Error getting geolocation:", error);
-        }
-      );
-    } else {
-      console.error("Geolocation is not supported by this browser.");
+  const getApproximateLocation = async () => {
+    try {
+      const response = await axios.get("https://ipinfo.io/json?token=6a57d4b75e39c7");
+      const city = response.data.city;
+      
+      if (city) {
+        await setCity(city);
+        await fetchWeatherData(city); 
+      } else {
+        console.error("No city available.");
+      }
+    } catch (error) {
+      console.error("Error getting approximate location:", error);
     }
+  };
+
+  useEffect(() => {
+    getApproximateLocation();
   }, []);
   const weatherIcons = {
     maxTemp: <FontAwesomeIcon icon={faTemperatureHigh} />,
