@@ -31,7 +31,7 @@ function App() {
           `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${city}&days=7`
         );
       }
-
+  
       setWeatherData(response.data);
       setSelectedDayIndex(null);
       setSelectedHourlyIndex(null);
@@ -39,15 +39,17 @@ function App() {
       console.error("Error fetching weather data:", error);
     }
   };
-
+  
   const getApproximateLocation = async () => {
     try {
-      const response = await axios.get("https://ipinfo.io/json?token=6a57d4b75e39c7");
+      const response = await axios.get(
+        "https://ipinfo.io/json?token=6a57d4b75e39c7"
+      );
       const city = response.data.city;
-      
+  
       if (city) {
-        await setCity(city);
-        await fetchWeatherData(city); 
+        setCity(city);
+        fetchWeatherData(city); // Truyền tham số city vào hàm fetchWeatherData
       } else {
         console.error("No city available.");
       }
@@ -55,6 +57,11 @@ function App() {
       console.error("Error getting approximate location:", error);
     }
   };
+  
+  useEffect(() => {
+    getApproximateLocation();
+  }, []);
+  
 
   useEffect(() => {
     getApproximateLocation();
@@ -77,7 +84,7 @@ function App() {
         value={city}
         onChange={(e) => setCity(e.target.value)}
       />
-      <button onClick={fetchWeatherData}>Get Weather</button>
+      <button onClick={() => fetchWeatherData(city)}>Get Weather</button>
 
       {weatherData && (
         <div className="weather-info">
