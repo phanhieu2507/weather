@@ -19,21 +19,11 @@ function App() {
 
   const API_KEY = "616cff8c8988474eb6992953230808";
 
-  const fetchWeatherData = async () => {
+  const fetchWeatherData = async (location) => {
     try {
-      let response;
-
-      if (city.match(/^[-+]?[0-9]*\.?[0-9]+,[-+]?[0-9]*\.?[0-9]+$/)) {
-        const [latitude, longitude] = city.split(",");
-        response = await axios.get(
-          `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${latitude},${longitude}&days=7`
-        );
-      } else {
-        response = await axios.get(
-          `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${city}&days=7`
-        );
-      }
-
+      const response = await axios.get(
+        `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${location}&days=7`
+      );
       setWeatherData(response.data);
       setSelectedDayIndex(null);
       setSelectedHourlyIndex(null);
@@ -41,20 +31,23 @@ function App() {
       console.error("Error fetching weather data:", error);
     }
   };
+
   useEffect(() => {
     // Get current user's geolocation
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        const { latitude, longitude } = position.coords;
-        // Call the fetchWeatherData function with latitude and longitude
-        setCity(`${latitude},${longitude}`)
-        console.log(city)
-        fetchWeatherData();
-      }, (error) => {
-        console.error('Error getting geolocation:', error);
-      });
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          const location = `${latitude},${longitude}`;
+          setCity(location);
+          fetchWeatherData(location);
+        },
+        (error) => {
+          console.error("Error getting geolocation:", error);
+        }
+      );
     } else {
-      console.error('Geolocation is not supported by this browser.');
+      console.error("Geolocation is not supported by this browser.");
     }
   }, []);
   const weatherIcons = {
